@@ -40,6 +40,8 @@ def display_images(outputs, inputs=None, gt=None, is_colormap=True, is_rescale=T
     import matplotlib.pyplot as plt
     import skimage
     from skimage.transform import resize
+    import os
+    import shutil
 
     plasma = plt.get_cmap('plasma')
 
@@ -70,13 +72,20 @@ def display_images(outputs, inputs=None, gt=None, is_colormap=True, is_rescale=T
             
             img = skimage.util.montage([plasma(rescaled)[:,:,:3]], multichannel=True, fill=(0,0,0))
             im = Image.fromarray(np.uint8(img*255))
-            im.save('output/depth_img-'+str(i)+'.jpg')
+            try:
+                os.mkdir("DepthImage")
+            except:
+                shutil.rmtree("DepthImage")
+                os.mkdir("DepthImage")
+
+    
+            im.save('DepthImage/depth_img-'+str(i)+'.jpg')
         else:
             imgs.append(to_multichannel(outputs[i]))
 
             img = skimage.util.montage([to_multichannel(outputs[i])], multichannel=True, fill=(0,0,0))
             im = Image.fromarray(np.uint8(img*255))
-            im.save('output/depth_img-'+str(i)+'.jpg')
+            im.save('DepthImage/depth_img-'+str(i)+'.jpg')
 
         
         
